@@ -1,0 +1,131 @@
+@import "tailwindcss";
+
+/* Design tokens. Every color and font in the interface comes from here. */
+@theme {
+  --color-bg: #09090b;
+  --color-surface: #121214;
+  --color-surface-2: #18181b;
+  --color-ink: #f4f4f5;
+  --color-ink-2: #a1a1aa;
+  --color-ink-3: #85858f;
+  --color-line: rgb(255 255 255 / 0.07);
+  --color-line-2: rgb(255 255 255 / 0.13);
+  --color-accent: #9a9dff;
+  --color-match: #5fbf8f;
+  --color-uncertain: #d6a94a;
+  --color-unknown: #8b8b95;
+  --color-danger: #e5706f;
+
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@layer base {
+  :root {
+    color-scheme: dark;
+  }
+
+  html {
+    scrollbar-color: rgb(255 255 255 / 0.2) transparent;
+  }
+
+  body {
+    @apply min-h-dvh bg-bg font-sans text-base text-ink antialiased;
+  }
+
+  ::selection {
+    background: rgb(154 157 255 / 0.35);
+  }
+
+  h1,
+  h2,
+  h3 {
+    @apply text-balance tracking-tight;
+  }
+
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-accent;
+  }
+}
+
+/* Patterns that repeat across screens. Layout and one-off styling stay in the markup. */
+@layer components {
+  .card {
+    @apply rounded-[20px] border border-line bg-surface;
+  }
+
+  .btn {
+    @apply inline-flex min-h-11 cursor-pointer items-center justify-center gap-2 rounded-xl border border-transparent px-5 py-2.5 text-[0.9375rem] font-medium transition-colors duration-200 ease-out-expo disabled:cursor-not-allowed disabled:opacity-40;
+  }
+
+  .btn-primary {
+    @apply bg-ink text-bg enabled:hover:bg-white;
+  }
+
+  .btn-ghost {
+    @apply border-line-2 bg-surface-2 text-ink enabled:hover:bg-white/10;
+  }
+
+  .btn-danger {
+    @apply border-danger/45 bg-transparent text-danger enabled:hover:bg-danger/10 focus-visible:bg-danger/10;
+  }
+
+  .btn-recording {
+    @apply bg-danger text-bg enabled:hover:bg-danger/90;
+  }
+
+  .icon-btn {
+    @apply inline-grid size-10 cursor-pointer place-items-center rounded-[10px] border border-transparent bg-transparent text-ink-3 transition-colors duration-200 ease-out-expo hover:bg-white/8 hover:text-ink;
+  }
+
+  .icon-btn-danger {
+    @apply hover:bg-danger/10 hover:text-danger focus-visible:bg-danger/10 focus-visible:text-danger;
+  }
+
+  .link {
+    @apply cursor-pointer border-0 bg-transparent p-0 text-ink underline decoration-ink-3 underline-offset-4 hover:decoration-ink;
+  }
+
+  .input {
+    @apply min-h-11 w-full rounded-xl border border-line-2 bg-bg px-4 py-2.5 text-ink placeholder:text-ink-3 focus-visible:border-accent;
+  }
+
+  .notice {
+    @apply flex items-center gap-2 rounded-xl border border-line bg-surface px-4 py-3 text-ink-2;
+  }
+
+  .notice-error {
+    @apply border-danger/40 text-[#f2b8b7];
+  }
+
+  .notice-ok {
+    @apply border-match/35 text-[#b4e3cb];
+  }
+
+  .pill {
+    @apply inline-flex w-fit items-center gap-2 rounded-full border border-line bg-surface-2 px-3 py-1 text-[0.8125rem] font-medium text-ink-2;
+  }
+
+  .pill-dot {
+    @apply size-1.5 rounded-full bg-unknown;
+  }
+
+  .pill[data-status="match"] .pill-dot {
+    @apply bg-match;
+  }
+
+  .pill[data-status="uncertain"] .pill-dot {
+    @apply bg-uncertain;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}
