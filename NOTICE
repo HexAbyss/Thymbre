@@ -1,0 +1,22 @@
+Thymbre
+Copyright 2026 HexAbyss
+
+This product is licensed under the Apache License, Version 2.0.
+
+Speaker embedding model
+-----------------------
+Thymbre downloads a pretrained speaker embedding model at runtime and does not
+redistribute its weights. The model is provided by SpeechBrain and was trained
+on VoxCeleb. Check the model card and the VoxCeleb terms before using Thymbre
+in a commercial product.
+
+Third-party software
+--------------------
+Thymbre depends on open source packages (FastAPI, SQLAlchemy, Alembic, pgvector,
+SpeechBrain and others), each under its own license.
+
+Sample voices
+-------------
+The screenshots in docs/images use speech from LibriSpeech test-clean
+(https://www.openslr.org/12), which is licensed under CC BY 4.0. The names shown
+in them are made up.
