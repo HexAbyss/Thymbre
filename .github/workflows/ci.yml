@@ -1,0 +1,46 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  backend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build backend image
+        run: docker compose build backend
+      - name: Lint
+        run: docker compose run --rm --no-deps backend sh -c "ruff check . && ruff format --check ."
+      - name: Test
+        run: docker compose run --rm backend pytest
+      - name: Audit dependencies
+        run: docker compose run --rm --no-deps backend pip-audit --cache-dir /tmp/pip-audit
+
+  frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Lint, type check and test
+        run: docker build --target check -f src/frontend/Dockerfile .
+      - name: Audit dependencies
+        run: |
+          docker build --target deps -t thymbre-frontend-deps -f src/frontend/Dockerfile .
+          docker run --rm thymbre-frontend-deps npm audit --omit=dev --audit-level=high
+
+  stack:
+    runs-on: ubuntu-latest
+    needs: [backend, frontend]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Start the whole stack
+        run: docker compose up -d --build --wait --wait-timeout 300 || (docker compose logs && exit 1)
+      - name: The API and the frontend answer
+        run: |
+          curl --fail http://localhost:8000/health
+          curl --fail http://localhost:3100/
+          curl --fail http://localhost:3100/api/config
+      - name: Uploads cross the frontend proxy
+        run: docker compose run --rm --no-deps -e FRONTEND_URL=http://frontend:3000 backend pytest tests/regression/test_frontend_proxy_uploads.py
