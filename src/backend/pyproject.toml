@@ -1,0 +1,37 @@
+[project]
+name = "thymbre-backend"
+version = "0.1.0"
+description = "Voice biometrics API: enroll voices and identify who is speaking."
+license = { text = "Apache-2.0" }
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi>=0.115",
+    "uvicorn[standard]>=0.32",
+    "sqlalchemy>=2.0",
+    "alembic>=1.14",
+    "psycopg[binary]>=3.2",
+    "pgvector>=0.3",
+    "pydantic-settings>=2.6",
+    "python-multipart>=0.0.18",
+    "numpy>=1.26",
+    "torch>=2.4",
+    "torchaudio>=2.4",
+    "speechbrain>=1.0",
+    "silero-vad>=5.1",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8", "httpx>=0.27", "ruff>=0.8", "pip-audit>=2.7"]
+
+[tool.ruff]
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP", "S"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["S101"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
